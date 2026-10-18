@@ -2,13 +2,13 @@
 layout: home
 title: Native LZMA2 Compression & Decompression Library for Zig
 titleTemplate: ":title | lzma2.zig"
-description: High-ratio, memory-safe, pure native Zig 0.17.0 implementation of the LZMA2 compression codec, raw chunk protocol, caller-allocated buffers, and reusable contexts.
+description: Type-safe, memory-conscious, native Zig implementation of modern LZMA2 and legacy LZMA compression codecs targeting Zig 0.17.0. High-ratio dictionary encoding, zero external C dependencies, caller-provided buffers, and reusable contexts.
 keywords: native lzma2 compression and decompression library for zig, zig lzma2, pure zig compression, 7-zip lzma2, xz lzma2, zig 0.17.0, zero dependencies
 
 hero:
   name: "lzma2.zig"
   text: "Native LZMA2 Compression for Zig"
-  tagline: "Pure Zig implementation of the LZMA2 compression codec targeting Zig 0.17.0. Zero C dependencies, zero overhead, memory-conscious."
+  tagline: "Type-safe, memory-conscious, native Zig implementation of modern LZMA2 and legacy LZMA compression codecs."
   actions:
     - theme: brand
       text: Get Started

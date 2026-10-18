@@ -78,28 +78,6 @@ Understanding the distinction between raw codecs and archive/container formats:
 
 ---
 
-## Architecture & Source Code Layout
-
-Every source file in `src/` is organized with clear functionality-based naming:
-
-| Source Module | Primary Functionality | Public Re-exports / Aliases |
-|---|---|---|
-| [`src/lzma2.zig`](src/lzma2.zig) | Root LZMA2 package entry point, high-level API | Package root (`lzma2`) |
-| [`src/lzma.zig`](src/lzma.zig) | Root LZMA package entry point, Markov state machine | Package root (`lzma`) |
-| [`src/compress/container.zig`](src/compress/container.zig) | Legacy `.lzma` 13-byte container file compressor | `lzma.compress`, `lzma2.alone.compress` |
-| [`src/compress/lzma.zig`](src/compress/lzma.zig) | Classic raw LZMA stream encoder, match finder pipeline | `lzma.compressRaw`, `lzma.Encoder` |
-| [`src/compress/lzma2.zig`](src/compress/lzma2.zig) | LZMA2 chunk encoder, copy chunk fallback, reset modes | `lzma2.compress`, `lzma2.Compressor` |
-| [`src/compress/streaming.zig`](src/compress/streaming.zig) | Streaming reader/writer pipelines for LZMA2 and `.lzma` | `lzma2.compressStream`, `lzma2.StreamingCompressor` |
-| [`src/decompress/container.zig`](src/decompress/container.zig) | Legacy `.lzma` 13-byte container file decompressor | `lzma.decompress`, `lzma2.alone.decompress` |
-| [`src/decompress/lzma.zig`](src/decompress/lzma.zig) | Classic raw LZMA stream decoder, reverse-tree decoding | `lzma.decompressRaw`, `lzma.Decoder` |
-| [`src/decompress/lzma2.zig`](src/decompress/lzma2.zig) | LZMA2 chunk decoder, control-byte parsing | `lzma2.decompress`, `lzma2.Decompressor` |
-| [`src/utils/range_codec.zig`](src/utils/range_codec.zig) | 32-bit adaptive binary range encoder and decoder | `lzma.range_codec`, `lzma2.range_codec` |
-| [`src/utils/match_finder.zig`](src/utils/match_finder.zig) | Multi-level sliding-window match finder | `lzma.match_finder`, `lzma2.match_finder` |
-| [`src/utils/state.zig`](src/utils/state.zig) | Shared Markov state transitions, length coders, pos slots | `lzma.state`, `lzma.LzmaState` |
-| [`src/utils/options.zig`](src/utils/options.zig) | Compression options, presets, property converters | `lzma.options`, `lzma2.options` |
-| [`src/utils/errors.zig`](src/utils/errors.zig) | Unified error sets for compression and decompression | `lzma.errors`, `lzma2.errors` |
-
----
 
 ## Installation
 
@@ -297,11 +275,11 @@ zig fmt --check src/ examples/ build.zig build.zig.zon
 
 ---
 
-## Security Considerations & Limitations
+## Security & Resource Management
 
-- **Decompression Bombs**: LZMA2 data can achieve compression ratios exceeding 1,000:1. Always specify `max_output_size` when decompressing untrusted inputs to guard against resource exhaustion.
-- **Memory Consumption**: High compression presets (level 7–9) allocate dictionary history buffers up to 64 MiB. In memory-constrained systems, use presets 1–4 or caller-provided buffer modes (`compressInto` / `decompressInto`).
-- **Format Validation vs Security**: The decoder strictly rejects malformed chunk headers (`error.InvalidControlByte`), corrupt bitstreams (`error.CorruptData`), and invalid `.lzma` properties (`error.InvalidProperties`). However, callers are responsible for establishing application-level quotas.
+- **Decompression Bomb Protection**: LZMA2 data can achieve compression ratios exceeding 1,000:1. Built-in `max_output_size` guards allow callers to enforce strict uncompressed byte caps when processing untrusted inputs.
+- **Configurable Memory Usage**: Tailor memory footprint for constrained environments via compression presets (1–4) or zero-heap caller-provided buffer modes (`compressInto` / `decompressInto`). Higher presets (7–9) scale dictionary history up to 64 MiB for maximum compression ratios.
+- **Robust Format Validation**: The decoder strictly validates bitstreams, rejecting malformed chunk headers (`error.InvalidControlByte`), corrupt range-coded bitstreams (`error.CorruptData`), and invalid `.lzma` properties (`error.InvalidProperties`).
 - See [SECURITY.md](SECURITY.md) for vulnerability reporting guidelines.
 
 ---
