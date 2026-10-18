@@ -263,8 +263,8 @@ pub const LzmaOptions = struct {
     }
 
     pub fn validate(self: LzmaOptions) errors.CompressError!void {
-        if (self.lc > 8 or self.lp > 4 or self.pb > 4) return error.InvalidOptions;
-        if (@as(u5, self.lc) + @as(u5, self.lp) > 12) return error.InvalidOptions;
+        if (self.lc > 4 or self.lp > 4 or self.pb > 4) return error.InvalidOptions;
+        if (@as(u5, self.lc) + @as(u5, self.lp) > 4) return error.InvalidOptions;
         if (self.dict_size) |ds| {
             if (ds < DICT_SIZE_MIN or ds > DICT_SIZE_MAX) return error.InvalidOptions;
         }
@@ -437,9 +437,10 @@ test "options: alone header encode and decode" {
 }
 
 test "options: lzma validation" {
-    var lz = LzmaOptions{ .lc = 8, .lp = 2, .pb = 2 };
-    try lz.validate(); // lc + lp = 10 <= 12 is valid
+    var lz = LzmaOptions{ .lc = 3, .lp = 1, .pb = 2 };
+    try lz.validate(); // lc + lp = 4 <= 4 is valid
 
-    lz.lc = 9; // > 8 is invalid
+    lz.lc = 4;
+    lz.lp = 1; // lc + lp = 5 > 4 is invalid
     try std.testing.expectError(error.InvalidOptions, lz.validate());
 }
