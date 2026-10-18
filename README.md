@@ -392,24 +392,20 @@ zig build -Dtarget=x86-freestanding
 
 ## Security & Resource Management
 
-- **Decompression Bomb Protection (CWE-409)**: Repetitive or malicious streams can achieve compression ratios exceeding 1,000:1 (and upwards of 10,000:1 on synthetic runs). `lzma2.zig` guards against denial-of-service and memory exhaustion via three defense-in-depth mechanisms:
-  - **Uncompressed Output Caps**: Set `DecompressOptions.max_output_size` to enforce strict output byte limits; if uncompressed bytes exceed this threshold, the decoder halts immediately with `error.ExceededSizeLimit`.
-  - **Dictionary Memory Bounds**: Set `DecompressOptions.dict_size_limit` to prevent rogue headers from forcing multi-gigabyte dictionary allocations before decoding starts.
-  - **Zero-Allocation Stack Buffer Execution**: Using `decompressInto` or `compressInto` operates entirely on caller-provided buffers with zero heap allocations. If output exceeds buffer capacity, the function returns `error.OutputTooSmall` without allocating memory.
-- **Configurable Memory Usage & Presets**: Tailor memory footprint for constrained environments or maximum compression efficiency:
-  - **Constrained & Embedded (Presets 0–4)**: Dictionaries from 4 KiB to 2 MiB, minimal match-finder search depths, and zero-heap stack buffer modes (`compressInto` / `decompressInto`).
-  - **General-Purpose (Presets 5–6)**: Balanced 4 MiB to 8 MiB dictionaries for fast, efficient runtime execution.
-  - **High-Ratio Archival (Presets 7–9)**: Extended dictionaries (16 MiB, 32 MiB, and 64 MiB) with deep search trees for distribution packages.
-  - **Arbitrary Dictionary Sizing**: Configure custom dictionary sizes up to 1 GiB (`dict_size`), fine-tuned Markov parameters (`lc`, `lp`, `pb`), and fast/normal search modes.
-  - **Stateful Context Reuse**: Reusable `lzma2.Compressor` and `lzma2.Decompressor` retain dictionary allocations across requests via `.reset()`, eliminating dynamic memory churn in high-throughput services.
-- **Robust Format Validation**: The decoder strictly validates bitstreams against the official LZMA/LZMA2 specification:
-  - **Chunk Control Framing**: Validates chunk control bytes (`0x00` EOS, `0x01` copy chunk with dict reset, `0x02` copy chunk without reset, `0x80`..`0xFF` compressed LZMA chunks with all reset modes), rejecting unknown or malformed chunk headers (`error.InvalidControlByte`).
-  - **Mandatory Dictionary Initialization**: Ensures that the initial chunk in any valid LZMA2 stream resets the dictionary state (`error.DictionaryResetExpected`).
-  - **Range-Coded Bitstream Integrity**: 32-bit adaptive binary range decoding with normalized probability transitions detects truncated inputs (`error.UnexpectedEof`) and corrupt range code transitions (`error.CorruptData`).
-  - **Property Byte Limits**: Strictly validates Markov parameters (`lc + lp <= 4`, `pb <= 4` for LZMA2; `lc + lp <= 8`, `pb <= 4` for legacy `.lzma`) and dictionary property indices ($0 \le \text{prop} \le 40$), rejecting invalid properties with `error.InvalidProperties`.
-- See [SECURITY.md](SECURITY.md) for vulnerability reporting guidelines.
+`lzma2.zig` is designed to process untrusted inputs safely. Key protections include:
+
+| Protection | Mechanism |
+|---|---|
+| **Decompression Bomb (CWE-409)** | `DecompressOptions.max_output_size` caps uncompressed output; `error.ExceededSizeLimit` on breach |
+| **Dictionary Memory Bounds** | `DecompressOptions.dict_size_limit` restricts peak allocation before dictionary is created |
+| **Zero-Allocation Execution** | `compressInto` / `decompressInto` operate on caller buffers with no heap use; `error.OutputTooSmall` on overflow |
+| **Bitstream Integrity** | Chunk control byte validation, range-coded bitstream integrity, and property byte range enforcement |
+| **Preset Scaling (0–9)** | Dictionaries from 4 KiB (preset 0) to 64 MiB (preset 9); stateful context reuse via `.reset()` |
+
+See [SECURITY.md](SECURITY.md) for vulnerability reporting guidelines and full resource-exhaustion guidance.
 
 ---
+
 
 ## Format & Compatibility Overview
 
