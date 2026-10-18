@@ -1,0 +1,16 @@
+{
+  "name": "lzma2-zig-docs",
+  "version": "0.0.1",
+  "description": "Documentation for lzma2.zig - Native Zig LZMA2 compression library",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  }
+}

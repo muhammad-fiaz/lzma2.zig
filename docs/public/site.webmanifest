@@ -1,0 +1,16 @@
+{
+  "name": "lzma2.zig",
+  "short_name": "lzma2.zig",
+  "description": "High-performance native Zig implementation of the LZMA2 compression format.",
+  "start_url": "/lzma2.zig/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0284c7",
+  "icons": [
+    {
+      "src": "/lzma2.zig/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
