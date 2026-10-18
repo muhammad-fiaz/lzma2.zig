@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: mlugg/setup-zig@v2
         with:
           version: ${{ env.ZIG_VERSION }}
@@ -49,7 +49,7 @@ jobs:
           - { name: thumb-linux,      target: thumb-linux-musleabihf, optimize: Debug,     qemu: true }
           - { name: riscv32-linux,    target: riscv32-linux-musl,   optimize: Debug,       qemu: true }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: mlugg/setup-zig@v2
         with:
           version: ${{ env.ZIG_VERSION }}
@@ -79,7 +79,7 @@ jobs:
           - { name: x86-windows,    target: x86-windows,    os: windows-latest }
           - { name: x86_64-windows, target: x86_64-windows, os: windows-latest }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: mlugg/setup-zig@v2
         with:
           version: ${{ env.ZIG_VERSION }}
@@ -97,7 +97,7 @@ jobs:
           - { name: aarch64-macos, target: aarch64-macos, os: macos-latest }
           - { name: x86_64-macos, target: x86_64-macos, os: macos-15-intel }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: mlugg/setup-zig@v2
         with:
           version: ${{ env.ZIG_VERSION }}
@@ -116,7 +116,7 @@ jobs:
           - { name: arm-linux-gnueabihf, target: arm-linux-gnueabihf }
           - { name: x86-freestanding, target: x86-freestanding }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: mlugg/setup-zig@v2
         with:
           version: ${{ env.ZIG_VERSION }}
