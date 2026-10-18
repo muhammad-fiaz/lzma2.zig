@@ -22,7 +22,7 @@ export default defineConfig({
   cleanUrls: false,
 
   sitemap: {
-    hostname: SITE_URL,
+    hostname: "https://muhammad-fiaz.github.io/lzma2.zig/",
   },
 
   head: [
