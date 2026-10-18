@@ -1,7 +1,7 @@
 {
   "name": "lzma2.zig",
   "short_name": "lzma2.zig",
-  "description": "High-performance native Zig implementation of the LZMA2 compression format.",
+  "description": "Native Zig LZMA2 and LZMA compression library.",
   "start_url": "/lzma2.zig/",
   "display": "standalone",
   "background_color": "#0f172a",

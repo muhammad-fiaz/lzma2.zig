@@ -1,6 +1,6 @@
 .{
     .name = .lzma2,
-    .version = "0.1.0",
+    .version = "0.0.1",
     .fingerprint = 0x6a5c7ebc61642363,
     .minimum_zig_version = "0.17.0",
     .dependencies = .{},

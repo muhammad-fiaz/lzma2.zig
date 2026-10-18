@@ -93,17 +93,27 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://muhammad-fiaz.github.io/lzma2.zig/examples/compression_levels</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://muhammad-fiaz.github.io/lzma2.zig/examples/configured_compression</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://muhammad-fiaz.github.io/lzma2.zig/examples/reusable_context</loc>
+    <loc>https://muhammad-fiaz.github.io/lzma2.zig/examples/error_handling</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://muhammad-fiaz.github.io/lzma2.zig/examples/error_handling</loc>
+    <loc>https://muhammad-fiaz.github.io/lzma2.zig/examples/lzma_compression</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://muhammad-fiaz.github.io/lzma2.zig/examples/reusable_context</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

@@ -4,7 +4,7 @@ const std = @import("std");
 const errors = @import("errors.zig");
 
 /// Library version.
-pub const version = "0.1.0";
+pub const version = "0.0.1";
 
 /// Converts an XZ / LZMA2 1-byte dictionary property (0..40) to dictionary size in bytes.
 ///

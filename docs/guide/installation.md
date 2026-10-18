@@ -1,21 +1,25 @@
 # Installation & Build Integration
 
-`lzma2.zig` is packaged as a standard Zig package designed for **Zig 0.17.0**. It has zero C dependencies and requires no system libraries.
+`lzma2.zig` is packaged as a standard Zig package designed for **Zig 0.17.0 or later**. It has zero C dependencies and requires no system libraries.
 
 ---
 
 ## 1. Requirements
 
-- **Zig Compiler**: Version `0.17.0` (or compatible build).
+- **Zig Compiler**: Version `0.17.0 or later` (required).
 - **Supported Operating Systems**: Linux, Windows, macOS, FreeBSD, NetBSD, and bare-metal targets supported by Zig.
 
 ---
 
 ## 2. Adding to `build.zig.zon`
 
-You can fetch and record the package dependency automatically with `zig fetch`:
+You can fetch and record the package dependency automatically with `zig fetch`. The recommended method is to pin to the latest tagged release:
 
 ```bash
+# Recommended: Latest tagged release (0.0.1)
+zig fetch --save https://github.com/muhammad-fiaz/lzma2.zig/archive/refs/tags/0.0.1.tar.gz
+
+# Alternative: Latest development build (main branch)
 zig fetch --save git+https://github.com/muhammad-fiaz/lzma2.zig.git
 ```
 
@@ -25,10 +29,9 @@ Alternatively, you can manually add `lzma2` to your `build.zig.zon`:
 .{
     .name = .my_app,
     .version = "0.1.0",
-    .fingerprint = 0xabcdef0123456789,
     .dependencies = .{
         .lzma2 = .{
-            .url = "git+https://github.com/muhammad-fiaz/lzma2.zig.git",
+            .url = "https://github.com/muhammad-fiaz/lzma2.zig/archive/refs/tags/0.0.1.tar.gz",
             .hash = "...", // populated automatically by zig fetch
         },
     },

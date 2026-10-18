@@ -8,7 +8,7 @@ keywords: native lzma2 compression and decompression library for zig, zig lzma2,
 hero:
   name: "lzma2.zig"
   text: "Native LZMA2 Compression for Zig"
-  tagline: "Type-safe, memory-conscious, native Zig implementation of modern LZMA2 and legacy LZMA compression codecs."
+  tagline: "Native Zig LZMA2 and LZMA compression library."
   actions:
     - theme: brand
       text: Get Started

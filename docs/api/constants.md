@@ -31,4 +31,4 @@ The `lzma2` package exposes constants governing chunk sizes, dictionary boundari
 
 | Constant | Value | Description |
 |---|---|---|
-| `version` | `"0.1.0"` | Library version string |
+| `version` | `"0.0.1"` | Library version string |

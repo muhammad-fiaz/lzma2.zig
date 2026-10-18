@@ -3,7 +3,7 @@ import { defineConfig } from "vitepress";
 export const SITE_URL = "https://muhammad-fiaz.github.io/lzma2.zig";
 export const SITE_NAME = "lzma2.zig";
 export const SITE_DESCRIPTION =
-  "Type-safe, memory-conscious, native Zig implementation of modern LZMA2 and legacy LZMA compression codecs. Zero external C dependencies, high-ratio dictionary coding, caller-provided buffer support, and reusable contexts.";
+  "Native Zig LZMA2 and LZMA compression library. Zero external C dependencies, high-ratio dictionary coding, caller-provided buffer support, and reusable contexts.";
 
 export const GA_ID = "G-6BVYCRK57P";
 export const GTM_ID = "GTM-P4M9T8ZR";
