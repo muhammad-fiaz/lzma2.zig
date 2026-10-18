@@ -377,12 +377,15 @@ zig build check              # Validate compilation of library, tests, and examp
 zig fmt --check src/ examples/ build.zig build.zig.zon
 ```
 
-### Multi-Target Cross-Compilation
+### Cross-Compilation Validation
 
-Test compilation against all 10 project target triples:
+Validate compilation across foreign target architectures:
 
-```powershell
-powershell -ExecutionPolicy Bypass -File tools/verify_targets.ps1
+```bash
+zig build -Dtarget=aarch64-linux
+zig build -Dtarget=x86_64-windows
+zig build -Dtarget=aarch64-macos
+zig build -Dtarget=x86-freestanding
 ```
 
 ---
@@ -454,8 +457,6 @@ lzma2.zig/
 │   ├── lzma_compression.zig        # Full .lzma container and raw stream pipelines
 │   └── reusable_context.zig        # Reusable context & chunk streaming
 ├── docs/                           # VitePress documentation portal
-├── tools/
-│   └── verify_targets.ps1          # 10-target cross-compilation harness
 ├── build.zig                       # Build system definition
 ├── build.zig.zon                   # Package metadata
 ├── README.md
