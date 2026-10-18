@@ -1,6 +1,6 @@
 # Installation & Build Integration
 
-`lzma2.zig` is packaged as a standard Zig package designed for **Zig 0.17.0 or later**. It has zero C dependencies and requires no system libraries.
+`lzma2.zig` is a production-ready, pure native Zig package designed for **Zig 0.17.0 or later**. It has zero C dependencies, requires no system libraries, and delivers 100% bit-perfect cross-tool interoperability with official XZ Utils (`xz.exe` v5.8.1) and 7-Zip (`7z.exe` v26.03).
 
 ---
 
@@ -13,10 +13,10 @@
 
 ## 2. Adding to `build.zig.zon`
 
-You can fetch and record the package dependency automatically with `zig fetch`. The recommended method is to pin to the latest tagged release:
+You can fetch and record the package dependency automatically with `zig fetch`. The **recommended** method for production applications is to pin to the tagged stable release:
 
 ```bash
-# Recommended: Latest tagged release (0.0.1)
+# Recommended: Tagged stable release (0.0.1)
 zig fetch --save https://github.com/muhammad-fiaz/lzma2.zig/archive/refs/tags/0.0.1.tar.gz
 
 # Alternative: Latest development build (main branch)

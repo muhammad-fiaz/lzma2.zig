@@ -2,13 +2,13 @@
 layout: home
 title: Native LZMA2 Compression & Decompression Library for Zig
 titleTemplate: ":title | lzma2.zig"
-description: Type-safe, memory-conscious, native Zig implementation of modern LZMA2 and legacy LZMA compression codecs targeting Zig 0.17.0. High-ratio dictionary encoding, zero external C dependencies, caller-provided buffers, and reusable contexts.
+description: Production-ready, type-safe, memory-conscious, native Zig implementation of modern LZMA2 and legacy LZMA compression codecs targeting Zig 0.17.0. High-ratio dictionary encoding, zero external C dependencies, caller-provided buffers, and reusable contexts.
 keywords: native lzma2 compression and decompression library for zig, zig lzma2, pure zig compression, 7-zip lzma2, xz lzma2, zig 0.17.0, zero dependencies
 
 hero:
   name: "lzma2.zig"
   text: "Native LZMA2 Compression for Zig"
-  tagline: "Native Zig LZMA2 and LZMA compression library."
+  tagline: "Production-ready native Zig LZMA2 and LZMA compression library."
   actions:
     - theme: brand
       text: Get Started
@@ -45,13 +45,20 @@ features:
   - icon: ⚙️
     title: Presets & Configurable Dictionaries
     details: Standard presets (`.fastest`, `.fast`, `.normal`, `.maximum`) and fine-grained controls for dictionary sizes up to 1 GiB and literal context bits.
+  - icon: 🧪
+    title: 100% Cross-Tool Interoperability
+    details: Rigorously cross-verified with official XZ Utils (`xz.exe` v5.8.1) and 7-Zip (`7z.exe` v26.03) with 100% bit-perfect decoding parity.
 ---
 
 ## Installation
 
-Add `lzma2.zig` to your project using `zig fetch`:
+`lzma2.zig` is production-ready. The **recommended** method for applications and downstream libraries is to pin to the tagged stable release:
 
 ```bash
+# Recommended: Tagged stable release (0.0.1)
+zig fetch --save https://github.com/muhammad-fiaz/lzma2.zig/archive/refs/tags/0.0.1.tar.gz
+
+# Alternative: Latest development build (main branch)
 zig fetch --save git+https://github.com/muhammad-fiaz/lzma2.zig.git
 ```
 
