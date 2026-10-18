@@ -1,6 +1,6 @@
 # Memory Management & Reusable Contexts
 
-`lzma2.zig` is designed for memory safety and zero unnecessary allocations. This guide explains how memory is managed across the library and how to optimize high-throughput workflows.
+`lzma2.zig` is designed for memory safety, predictable resource limits, and zero unnecessary heap allocations. This guide explains how memory is managed across the library and how to optimize high-throughput workflows.
 
 ---
 
@@ -14,7 +14,7 @@
   const comp = try lzma2.compress(allocator, data, .{});
   defer allocator.free(comp);
   ```
-- Functions ending in `Buffer` (such as `compressBuffer` and `decompressBuffer`) perform **zero heap allocations**. They write directly into caller-provided slices.
+- Functions named `compressInto` / `compressBuffer` and `decompressInto` / `decompressBuffer` perform **zero heap allocations**. They write directly into caller-provided slices and return the number of bytes written. If the buffer is insufficient, they return `error.OutputTooSmall`.
 
 ---
 
@@ -61,9 +61,19 @@ pub fn runBatch(allocator: std.mem.Allocator, items: [][]const u8) !void {
 
 ## 3. Buffer Bounds & Worst-Case Size
 
-For caller-buffer operations, you need to know how large the destination buffer must be.
+For caller-buffer operations, you need to know how large the destination buffer must be:
 
 - **`lzma2.maxCompressedSize(uncompressed_len)`**:
-  Calculates the worst-case compressed buffer capacity required. In LZMA2, uncompressed copy chunks add a tiny header overhead (5 bytes per 64 KiB chunk, plus 1 end-of-stream byte).
+  Calculates the worst-case compressed buffer capacity required. In LZMA2, uncompressed copy chunks add a tiny header overhead (3 bytes per 64 KiB chunk, plus 1 end-of-stream byte).
 - **Decompression Sizing**:
-  If the uncompressed size is known ahead of time (e.g., from container metadata or application headers), you can allocate an exact destination slice for `decompressBuffer`. If unknown, `lzma2.decompress()` dynamically manages heap capacity while enforcing `max_output_size`.
+  If the uncompressed size is known ahead of time (e.g., from container metadata or application headers), you can allocate an exact destination slice for `decompressInto`. If unknown, `lzma2.decompress()` dynamically manages heap capacity while enforcing `max_output_size`.
+
+---
+
+## 4. Decompression Bomb Protection (CWE-409)
+
+When processing untrusted LZMA2 streams:
+
+- **Enforce Output Limits**: Set `DecompressOptions.max_output_size` to cap the total uncompressed bytes. If exceeded, decoding halts immediately with `error.ExceededSizeLimit`.
+- **Restrict Dictionary Size**: Set `DecompressOptions.dict_size_limit` to restrict the maximum permitted sliding dictionary size before allocation.
+- **Zero-Allocation Stack Execution**: Use `decompressInto` with a fixed-size stack or pre-allocated buffer. If the decoded output exceeds the slice, it returns `error.OutputTooSmall` without allocating memory.
