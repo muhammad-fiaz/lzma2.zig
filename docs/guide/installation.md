@@ -1,6 +1,6 @@
 # Installation & Build Integration
 
-`lzma2.zig` is a production-ready, pure native Zig package designed for **Zig 0.17.0 or later**. It has zero C dependencies, requires no system libraries, and delivers 100% bit-perfect cross-tool interoperability with official XZ Utils (`xz.exe` v5.8.1) and 7-Zip (`7z.exe` v26.03).
+`lzma2.zig` is a production-ready, pure native Zig package designed for **Zig 0.17.0 or later**. It has zero C dependencies, requires no system libraries, and provides comprehensive native LZMA2 and LZMA compression and decompression.
 
 ---
 

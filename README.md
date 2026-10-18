@@ -367,12 +367,6 @@ zig build run-all-examples   # Run all examples in sequence
 
 ---
 
-## 100% Cross-Tool Interoperability
-
-Rigorously cross-verified with official XZ Utils (`xz.exe` v5.8.1) and 7-Zip (`7z.exe` v26.03) with 100% bit-perfect decoding parity across raw LZMA2 chunks, legacy `.lzma` container files, and streaming pipelines.
-
----
-
 ## Validation Matrix & Testing
 
 ```bash

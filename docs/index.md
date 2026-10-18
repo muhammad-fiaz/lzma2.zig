@@ -45,9 +45,6 @@ features:
   - icon: ⚙️
     title: Presets & Configurable Dictionaries
     details: Standard presets (`.fastest`, `.fast`, `.normal`, `.maximum`) and fine-grained controls for dictionary sizes up to 1 GiB and literal context bits.
-  - icon: 🧪
-    title: 100% Cross-Tool Interoperability
-    details: Rigorously cross-verified with official XZ Utils (`xz.exe` v5.8.1) and 7-Zip (`7z.exe` v26.03) with 100% bit-perfect decoding parity.
 ---
 
 ## Installation
