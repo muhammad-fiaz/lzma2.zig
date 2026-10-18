@@ -389,9 +389,21 @@ powershell -ExecutionPolicy Bypass -File tools/verify_targets.ps1
 
 ## Security & Resource Management
 
-- **Decompression Bomb Protection**: LZMA2 data can achieve compression ratios exceeding 1,000:1. Built-in `max_output_size` guards allow callers to enforce strict uncompressed byte caps when processing untrusted inputs.
-- **Configurable Memory Usage**: Tailor memory footprint for constrained environments via compression presets (1–4) or zero-heap caller-provided buffer modes (`compressInto` / `decompressInto`). Higher presets (7–9) scale dictionary history up to 64 MiB for maximum compression ratios.
-- **Robust Format Validation**: The decoder strictly validates bitstreams, rejecting malformed chunk headers (`error.InvalidControlByte`), corrupt range-coded bitstreams (`error.CorruptData`), and invalid `.lzma` properties (`error.InvalidProperties`).
+- **Decompression Bomb Protection (CWE-409)**: Repetitive or malicious streams can achieve compression ratios exceeding 1,000:1 (and upwards of 10,000:1 on synthetic runs). `lzma2.zig` guards against denial-of-service and memory exhaustion via three defense-in-depth mechanisms:
+  - **Uncompressed Output Caps**: Set `DecompressOptions.max_output_size` to enforce strict output byte limits; if uncompressed bytes exceed this threshold, the decoder halts immediately with `error.ExceededSizeLimit`.
+  - **Dictionary Memory Bounds**: Set `DecompressOptions.dict_size_limit` to prevent rogue headers from forcing multi-gigabyte dictionary allocations before decoding starts.
+  - **Zero-Allocation Stack Buffer Execution**: Using `decompressInto` or `compressInto` operates entirely on caller-provided buffers with zero heap allocations. If output exceeds buffer capacity, the function returns `error.OutputTooSmall` without allocating memory.
+- **Configurable Memory Usage & Presets**: Tailor memory footprint for constrained environments or maximum compression efficiency:
+  - **Constrained & Embedded (Presets 0–4)**: Dictionaries from 4 KiB to 2 MiB, minimal match-finder search depths, and zero-heap stack buffer modes (`compressInto` / `decompressInto`).
+  - **General-Purpose (Presets 5–6)**: Balanced 4 MiB to 8 MiB dictionaries for fast, efficient runtime execution.
+  - **High-Ratio Archival (Presets 7–9)**: Extended dictionaries (16 MiB, 32 MiB, and 64 MiB) with deep search trees for distribution packages.
+  - **Arbitrary Dictionary Sizing**: Configure custom dictionary sizes up to 1 GiB (`dict_size`), fine-tuned Markov parameters (`lc`, `lp`, `pb`), and fast/normal search modes.
+  - **Stateful Context Reuse**: Reusable `lzma2.Compressor` and `lzma2.Decompressor` retain dictionary allocations across requests via `.reset()`, eliminating dynamic memory churn in high-throughput services.
+- **Robust Format Validation**: The decoder strictly validates bitstreams against the official LZMA/LZMA2 specification:
+  - **Chunk Control Framing**: Validates chunk control bytes (`0x00` EOS, `0x01` copy chunk with dict reset, `0x02` copy chunk without reset, `0x80`..`0xFF` compressed LZMA chunks with all reset modes), rejecting unknown or malformed chunk headers (`error.InvalidControlByte`).
+  - **Mandatory Dictionary Initialization**: Ensures that the initial chunk in any valid LZMA2 stream resets the dictionary state (`error.DictionaryResetExpected`).
+  - **Range-Coded Bitstream Integrity**: 32-bit adaptive binary range decoding with normalized probability transitions detects truncated inputs (`error.UnexpectedEof`) and corrupt range code transitions (`error.CorruptData`).
+  - **Property Byte Limits**: Strictly validates Markov parameters (`lc + lp <= 4`, `pb <= 4` for LZMA2; `lc + lp <= 8`, `pb <= 4` for legacy `.lzma`) and dictionary property indices ($0 \le \text{prop} \le 40$), rejecting invalid properties with `error.InvalidProperties`.
 - See [SECURITY.md](SECURITY.md) for vulnerability reporting guidelines.
 
 ---
